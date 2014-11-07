@@ -10,9 +10,9 @@ RUN apt-get install -y \
 
 RUN mkdir /data
 
-ADD package.json /data
+ADD ./package.json /data/package.json
 
-RUN npm install
+RUN cd /data && npm install
 
 ADD . /data/
 
