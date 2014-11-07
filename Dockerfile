@@ -1,12 +1,19 @@
-FROM dockerfile/nodejs
+FROM node
+
+RUN echo deb http://ftp.fr.debian.org/debian/ jessie main contrib non-free > /etc/apt/source.list
+
+RUN apt-get update -y
 
 RUN apt-get install -y \
     python2.7 python-pip \
     libfreetype6 libfontconfig
 
-RUN cd / && git clone https://github.com/prerender/prerender
-RUN cd /prerender && npm install
+RUN mkdir /data
 
-RUN sed -i '/server.start()/i server.use(prerender.basicAuth());' /prerender/server.js
+ADD package.json /data
 
-CMD node /prerender/server.js
+RUN npm install
+
+ADD . /data/
+
+CMD node /data/server.js
